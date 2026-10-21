@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mihomo Console</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- 侧边栏 -->
+  <aside class="sidebar">
+    <div class="logo" title="Mihomo Console">
+      <svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+    </div>
+    <nav class="nav">
+      <button class="nav-item active" data-page="overview" title="总览">
+        <svg viewBox="0 0 24 24"><path fill="currentColor" d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+        <span>总览</span>
+      </button>
+      <button class="nav-item" data-page="proxies" title="代理">
+        <svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5h-2v-9h2v9zm4 0h-2v-9h2v9z"/></svg>
+        <span>代理</span>
+      </button>
+      <button class="nav-item" data-page="connections" title="连接">
+        <svg viewBox="0 0 24 24"><path fill="currentColor" d="M7.5 12.5h9l-1.5 3h-6l-1.5-3zM6.3 17.5l1.5 3h8.4l1.5-3H6.3zM4 7.5h16l-1.5-3H5.5l-1.5 3z"/></svg>
+        <span>连接</span>
+      </button>
+      <button class="nav-item" data-page="rules" title="规则">
+        <svg viewBox="0 0 24 24"><path fill="currentColor" d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+        <span>规则</span>
+      </button>
+      <button class="nav-item" data-page="logs" title="日志">
+        <svg viewBox="0 0 24 24"><path fill="currentColor" d="M20 8h-2.81a5.98 5.98 0 0 0-1.82-1.96L17 4.41 15.59 3l-2.17 2.17C12.96 5.06 12.49 5 12 5s-.96.06-1.41.17L8.41 3 7 4.41l1.62 1.63A5.98 5.98 0 0 0 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.79 2.4 5.08 2.9 7.48 1.11l1.57 1.57L17 17.59l-1.57-1.57A6 6 0 0 0 17.91 10H20V8zm-8 8c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/></svg>
+        <span>日志</span>
+      </button>
+      <button class="nav-item" data-page="config" title="配置">
+        <svg viewBox="0 0 24 24"><path fill="currentColor" d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96a7.03 7.03 0 0 0-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.488.488 0 0 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.49.49 0 0 0-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+        <span>配置</span>
+      </button>
+    </nav>
+  </aside>
+
+  <!-- 主区域 -->
+  <div class="main">
+    <header class="topbar">
+      <h1 id="pageTitle">总览</h1>
+      <div class="topbar-right">
+        <div class="traffic" title="实时流量">
+          <span class="up">↑ <b id="upSpeed">0 B/s</b></span>
+          <span class="down">↓ <b id="downSpeed">0 B/s</b></span>
+        </div>
+        <span class="badge" id="modeBadge">rule</span>
+        <span class="badge badge-dim" id="versionBadge">--</span>
+      </div>
+    </header>
+
+    <main class="content">
+      <!-- 总览 -->
+      <section class="page active" id="page-overview">
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-label">上行速率</div>
+            <div class="stat-value up" id="ovUp">0 B/s</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">下行速率</div>
+            <div class="stat-value down" id="ovDown">0 B/s</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">累计上行</div>
+            <div class="stat-value" id="ovUpTotal">0 B</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">累计下行</div>
+            <div class="stat-value" id="ovDownTotal">0 B</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">活跃连接</div>
+            <div class="stat-value" id="ovConn">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">内存占用</div>
+            <div class="stat-value" id="ovMem">0 B</div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-title">流量曲线 <span class="dim">(最近 60 秒)</span></div>
+          <canvas id="trafficChart" height="200"></canvas>
+        </div>
+        <div class="panel">
+          <div class="panel-title">运行信息</div>
+          <div class="kv-grid" id="ovInfo"></div>
+        </div>
+      </section>
+
+      <!-- 代理 -->
+      <section class="page" id="page-proxies">
+        <div class="panel-toolbar">
+          <button class="btn" id="btnTestAll">测试全部延迟</button>
+          <span class="dim" id="proxyCount"></span>
+        </div>
+        <div id="proxyGroups"></div>
+      </section>
+
+      <!-- 连接 -->
+      <section class="page" id="page-connections">
+        <div class="panel-toolbar">
+          <button class="btn btn-danger" id="btnCloseAll">关闭全部连接</button>
+          <span class="dim" id="connCount"></span>
+        </div>
+        <div class="panel">
+          <div class="conn-table-wrap">
+            <table class="table" id="connTable">
+              <thead>
+                <tr><th>主机</th><th>网络</th><th>类型</th><th>规则</th><th>链</th><th>上传</th><th>下载</th><th>开始时间</th><th></th></tr>
+              </thead>
+              <tbody id="connBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 规则 -->
+      <section class="page" id="page-rules">
+        <div class="panel-toolbar">
+          <input type="text" class="input" id="ruleSearch" placeholder="搜索规则...">
+        </div>
+        <div class="panel">
+          <div class="conn-table-wrap">
+            <table class="table" id="ruleTable">
+              <thead>
+                <tr><th>类型</th><th>负载</th><th>目标</th><th>命中</th></tr>
+              </thead>
+              <tbody id="ruleBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 日志 -->
+      <section class="page" id="page-logs">
+        <div class="panel-toolbar">
+          <select class="input" id="logLevel">
+            <option value="debug">debug</option>
+            <option value="info" selected>info</option>
+            <option value="warning">warning</option>
+            <option value="error">error</option>
+          </select>
+          <button class="btn" id="btnClearLog">清空</button>
+        </div>
+        <div class="panel log-panel" id="logPanel"></div>
+      </section>
+
+      <!-- 配置 -->
+      <section class="page" id="page-config">
+        <div class="panel-toolbar">
+          <button class="btn" id="btnReloadConfig">重载配置</button>
+          <button class="btn" id="btnFlushFakeIP">清 Fake-IP 缓存</button>
+          <button class="btn" id="btnFlushDNS">清 DNS 缓存</button>
+        </div>
+        <div class="panel">
+          <pre class="config-pre" id="configText"></pre>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- 连接设置弹窗 -->
+  <div class="modal" id="authModal">
+    <div class="modal-box">
+      <h2>连接后端</h2>
+      <p class="dim">请输入 mihomo 后端地址与密钥</p>
+      <label>后端地址</label>
+      <input type="text" class="input" id="authUrl" value="">
+      <label>密钥（无则留空）</label>
+      <input type="password" class="input" id="authSecret" value="">
+      <div class="modal-actions">
+        <button class="btn" id="btnAuthCancel">取消</button>
+        <button class="btn btn-primary" id="btnAuthSave">连接</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
