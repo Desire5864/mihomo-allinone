@@ -1,20 +1,26 @@
 # ============================================================
-#  mihomo 内核 + 自研面板(Mihomo Console) + country.mmdb 单镜像
+#  mihomo 内核 + metacubexd 面板 + country.mmdb 单镜像打包
 #  一个容器跑全部:内核用 external-ui 内置面板,单进程、单端口
 #
 #  对齐群晖 NAS 现状:
 #    - 内核镜像源 metacubex/mihomo (Docker Hub)
 #    - 内核二进制在 /mihomo (不在 PATH)
-#    - 面板为自研静态页面(ui/ 目录),不依赖外部 clone
+#    - 面板用 metacubexd gh-pages 静态产物
 # ============================================================
 
+# ---------- 阶段 1:拉取 metacubexd 面板静态文件(gh-pages) ----------
+FROM alpine:latest AS ui
+RUN apk add --no-cache git \
+    && git clone --depth 1 -b gh-pages https://github.com/MetaCubeX/metacubexd.git /ui
+
+# ---------- 阶段 2:组装最终镜像 ----------
 FROM metacubex/mihomo:latest
 
 # 配置目录(官方镜像约定)
 ENV MIHOMO_CONFIG_DIR=/root/.config/mihomo
 
-# 1) 自研面板静态文件(ui/index.html + style.css + app.js)
-COPY ui ${MIHOMO_CONFIG_DIR}/ui
+# 1) 内置面板静态文件(metacubexd gh-pages 编译产物)
+COPY --from=ui /ui ${MIHOMO_CONFIG_DIR}/ui
 
 # 2) GeoIP 国家数据库(启动必须)
 COPY country.mmdb ${MIHOMO_CONFIG_DIR}/country.mmdb
