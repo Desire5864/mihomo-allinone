@@ -1,0 +1,35 @@
+# ============================================================
+#  mihomo 内核配置文件(最小可用版)
+#  面板 metacubexd 已内置为 external-ui,与内核同一端口
+# ============================================================
+
+# 混合代理端口(HTTP + SOCKS 合一)
+mixed-port: 7890
+
+# 允许局域网访问(供其他设备当代理)
+allow-lan: true
+bind-address: "*"
+
+# 运行模式:rule 为规则模式
+mode: rule
+
+# 日志级别
+log-level: info
+
+# 外部控制器(API 走这里)
+# 0.0.0.0 允许容器外访问;生产环境务必设置 secret
+external-controller: 0.0.0.0:9090
+secret: "change-me"
+
+# 内置面板:相对路径,指向配置目录下的 ui 文件夹(镜像已打入 metacubexd)
+external-ui: ui
+
+# GeoIP 国家数据库(镜像内置,已放配置目录同级的 country.mmdb)
+# 简化示例:未配置任何代理节点/规则,仅保证能启动
+# 接入订阅后把 proxies / proxy-groups / rules 补全即可
+proxies: []
+
+proxy-groups: []
+
+rules:
+  - MATCH,DIRECT

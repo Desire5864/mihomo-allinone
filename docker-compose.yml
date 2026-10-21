@@ -1,0 +1,27 @@
+version: "3.8"
+
+# ============================================================
+#  mihomo 内核 + metacubexd 面板 + country.mmdb 单容器
+#  全部打包进镜像,开箱即用,面板在 9090/ui
+#  对齐 NAS 现状:host 网络模式 + TUN 透明代理
+# ============================================================
+
+services:
+  mihomo:
+    image: mihomo-allinone:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mihomo-allinone
+    restart: unless-stopped
+    network_mode: host          # 对齐 NAS 现状(TUN 透明代理)
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    environment:
+      - TZ=Asia/Shanghai
+    # 配置全部打包在镜像里,不挂载 config 目录。
+    # 若想热改配置,取消下面挂载并参考 README 的「改配置」一节
+    # volumes:
+    #   - ./config:/root/.config/mihomo
