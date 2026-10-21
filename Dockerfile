@@ -31,6 +31,7 @@ COPY config.yaml ${MIHOMO_CONFIG_DIR}/config.yaml
 WORKDIR ${MIHOMO_CONFIG_DIR}
 
 # 启动内核:二进制在 /mihomo,-d 指定配置目录
-# 内核会同时托管面板(9090/ui)与 API(9090)
+# -ext-ui 强制启用内置面板,优先级高于 config.yaml,
+# 这样用户挂载自己的 config.yaml(无 external-ui 字段)时面板照样生效
 ENTRYPOINT ["/mihomo"]
-CMD ["-d", "/root/.config/mihomo"]
+CMD ["-d", "/root/.config/mihomo", "-ext-ui", "/root/.config/mihomo/ui"]

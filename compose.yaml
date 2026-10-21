@@ -1,0 +1,37 @@
+services:
+  mihomo:
+    # Docker Hub 版(public,可直接 pull)。GHCR 版需先在网页设为 public:
+    #   https://github.com/users/desire5864/packages/container/mihomo-allinone/settings
+    image: zhangsan51455/mihomo-allinone:latest
+    # image: ghcr.io/desire5864/mihomo-allinone:latest
+    container_name: mihomo-allinone
+    restart: unless-stopped
+
+    # host 模式:直接监听宿主机端口,与 NAS 现有 mihomo 容器部署方式一致
+    network_mode: host
+
+    # TUN 透明代理所需权限
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+
+    environment:
+      - TZ=Asia/Shanghai
+
+    # 只挂 config.yaml 这一个文件;country.mmdb / ui/ 面板仍用镜像自带的(在 /root/.config/mihomo/ 下,未被遮住)
+    volumes:
+      - ./config.yaml:/root/.config/mihomo/config.yaml
+
+# 端口说明(host 模式下无需映射,直接监听宿主机):
+#   9090 -> 内核 API + 内置面板(/ui)
+#   7890 -> 混合代理端口(HTTP+SOCKS)
+
+# 部署前:先在同目录放好 config.yaml(用你 NAS 现有那份订阅配置即可):
+#   cp /volume1/docker/mihomo/config/config.yaml ./config.yaml
+# 然后:
+#   /usr/local/bin/docker compose pull && /usr/local/bin/docker compose up -d
+#
+# ✅ 无需手动加 external-ui:镜像启动命令已内置 -ext-ui,优先级高于 config.yaml,
+#   所以挂载你自己的 config.yaml(无 external-ui 字段)面板照样生效。
+#   country.mmdb 也不用放(镜像自带 /root/.config/mihomo/country.mmdb)
