@@ -2,5 +2,6 @@
 .github
 .dockerignore
 README.md
+country.mmdb
 build.sh
 docker-compose.yml
