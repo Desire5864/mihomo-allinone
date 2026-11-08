@@ -20,11 +20,19 @@
 ARG CORE_TAG=latest
 
 # ---------- 阶段 1:拉取 Yacd-meta 面板静态文件(gh-pages) ----------
+# Yacd-meta 的 index.html 里把默认后端写死成 http://127.0.0.1:9090,
+# 远程访问时面板会去连浏览器本机的 9090(必然连不上)。
+# 这里塞一行内联脚本,在 SPA 启动前把默认后端改成当前页面的 origin
+# —— 本镜像里面板和 API 同端口,location.origin 正好就是 external-controller。
 FROM alpine:latest AS ui
 ARG UI_REF=gh-pages
 RUN apk add --no-cache git \
     && git clone --depth 1 -b "${UI_REF}" https://github.com/MetaCubeX/Yacd-meta.git /ui \
-    && rm -rf /ui/.git
+    && rm -rf /ui/.git \
+    && sed -i 's|</body>|<script>var a=document.getElementById("app");if(a)a.dataset.baseUrl=location.origin;</script></body>|' /ui/index.html \
+    && ( grep -q 'dataset.baseUrl=location.origin' /ui/index.html \
+         && echo "[ui] 已把面板默认后端指向本机 origin" \
+         || echo "[ui] WARN: 未能注入默认后端,面板将要求手动填地址" )
 
 # ---------- 阶段 2:拉取最新 GeoIP 库(country.mmdb) ----------
 # 来源 MetaCubeX/meta-rules-dat 的 latest 滚动发布,每次构建都是当天最新

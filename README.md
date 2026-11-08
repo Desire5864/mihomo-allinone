@@ -101,6 +101,7 @@ volumes:
 ## 说明
 
 - 面板静态文件与 `country.mmdb` 都打在镜像里,位于容器 `/root/.config/mihomo/` 下(`ui/`、`country.mmdb`)。
+- **默认后端已改成随页面 origin 走**:Yacd-meta 原本在 `index.html` 里写死 `data-base-url="http://127.0.0.1:9090"`,远程访问时面板会去连「浏览器自己」的 9090(必然失败)。构建阶段注入了一行内联脚本,在 SPA 启动前把它改成 `location.origin`。本镜像面板与 API 同端口,所以打开 `/ui` 就是对的地址,不用手填。
 - **更新面板**:重新 build 即可(clone 最新 gh-pages);**更新 GeoIP 库**:同样重新 build(下载最新 mmdb)。两者都不需要改任何文件。
 - `external-ui` 由启动参数 `-ext-ui /root/.config/mihomo/ui` 强制指定,优先级高于 `config.yaml`,所以挂载你自己的配置时面板照样生效。
 - 换面板后如果浏览器仍显示旧页面,按一次 `Ctrl+Shift+R` 强制刷新——旧面板注册过 service worker,会缓存 app shell。
