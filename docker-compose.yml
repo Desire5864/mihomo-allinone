@@ -1,7 +1,7 @@
 version: "3.8"
 
 # ============================================================
-#  mihomo 内核 + Yacd-meta 面板 + country.mmdb 单容器
+#  mihomo 内核 + zashboard 面板 + country.mmdb 单容器
 #  全部打包进镜像,开箱即用,面板在 9090/ui
 #  面板与 GeoIP 库都在构建时取最新(见 Dockerfile 的 UI_REF / GEO_TAG)
 #  对齐 NAS 现状:host 网络模式 + TUN 透明代理
