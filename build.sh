@@ -3,8 +3,8 @@
 
 set -e
 
-echo "==> 1. 构建一体化镜像(mihomo 内核 + zashboard 面板 + 最新 country.mmdb)"
-echo "     构建阶段会 clone zashboard 的 gh-pages,并从 meta-rules-dat 下载最新 country.mmdb,"
+echo "==> 1. 构建一体化镜像(mihomo 内核 + Yacd-meta 面板 + 最新 country.mmdb)"
+echo "     构建阶段会 clone Yacd-meta 的 gh-pages,并从 meta-rules-dat 下载最新 country.mmdb,"
 echo "     需要能访问 GitHub,请耐心等待。"
 docker compose build
 
